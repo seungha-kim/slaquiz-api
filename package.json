@@ -1,0 +1,40 @@
+{
+   "name": "hello-typeorm",
+   "version": "1.0.0",
+   "description": "",
+   "main": "index.js",
+   "scripts": {
+      "start": "node build/index.js",
+      "clean": "rimraf build",
+      "build": "npm run clean && tsc",
+      "watch": "npm run clean && tsc --watch",
+      "typeorm": "npm run build && typeorm",
+      "lint": "tslint -p ."
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "dependencies": {
+      "dotenv": "^4.0.0",
+      "koa": "^2.4.1",
+      "koa-bodyparser": "^4.2.0",
+      "koa-logger": "^3.1.0",
+      "koa-passport": "^4.0.1",
+      "koa-router": "^7.2.1",
+      "passport-slack": "0.0.7",
+      "pg": "^7.4.0",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.1.2"
+   },
+   "devDependencies": {
+      "@types/koa": "^2.0.40",
+      "@types/koa-bodyparser": "^3.0.26",
+      "@types/koa-passport": "^2.0.5",
+      "@types/koa-router": "^7.0.24",
+      "@types/node": "^8.0.29",
+      "rimraf": "^2.6.2",
+      "ts-node": "3.3.0",
+      "tslint": "^5.8.0",
+      "typescript": "2.5.2"
+   }
+}
