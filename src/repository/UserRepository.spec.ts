@@ -49,7 +49,7 @@ describe('UserRepository', () => {
       };
       const userRepo = qr.manager.getCustomRepository(UserRepository);
       const {team, user} = await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
-      expect(team.id).toBe(1);
+      expect(team.id).toBe(2);
       expect(user.id).toBe(1);
     });
   }));

@@ -4,14 +4,11 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "node build/index.js",
-      "clean": "rimraf build",
-      "build": "npm run clean && tsc",
-      "watch": "npm run clean && tsc --watch",
-      "typeorm": "npm run build && typeorm",
+      "start": "ts-node src/index.ts",
+      "typeorm": "ts-node node_modules/.bin/typeorm",
       "lint": "tslint -p .",
       "test": "NODE_ENV=test jest",
-      "setup-test-db": "(export NODE_ENV=test; npm run build && typeorm schema:drop && typeorm migrations:run)"
+      "setup-test-db": "(export NODE_ENV=test; npm run typeorm -- schema:drop && npm run typeorm -- migrations:run)"
    },
    "keywords": [],
    "author": "",

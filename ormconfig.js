@@ -6,13 +6,13 @@ module.exports = {
   "url": process.env.NODE_ENV === "test" ? process.env.TEST_DATABASE_URL : process.env.DATABASE_URL,
   "logging": false,
   "entities": [
-     "build/entity/**/*.js"
+     "src/entity/**/*.ts"
   ],
   "migrations": [
-     "build/migration/**/*.js"
+     "src/migration/**/*.ts"
   ],
   "subscribers": [
-     "build/subscriber/**/*.js"
+     "src/subscriber/**/*.ts"
   ],
   "cli": {
      "entitiesDir": "src/entity",
