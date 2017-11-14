@@ -10,6 +10,13 @@ import * as Router from 'koa-router';
 import { Strategy as SlackStrategy } from 'passport-slack';
 import {createConnection} from 'typeorm';
 
+const {
+  SLACK_CALLBACK_URL,
+  SLACK_CLIENT_ID,
+  SLACK_CLIENT_SECRET,
+  PORT,
+} = process.env;
+
 interface ISlackProfile {
   user: {
     email: string,
@@ -24,9 +31,9 @@ interface ISlackProfile {
 
 createConnection().then(async (connection) => {
   passport.use(new SlackStrategy({
-    callbackURL: process.env.SLACK_CALLBACK_URL,
-    clientID: process.env.SLACK_CLIENT_ID,
-    clientSecret: process.env.SLACK_CLIENT_SECRET,
+    callbackURL: SLACK_CALLBACK_URL,
+    clientID: SLACK_CLIENT_ID,
+    clientSecret: SLACK_CLIENT_SECRET,
   }, async (accessToken: string, refreshToken: string, profile: ISlackProfile, done) => {
     const { manager } = connection;
     const userRepo = manager.getCustomRepository(UserRepository);
@@ -57,5 +64,6 @@ createConnection().then(async (connection) => {
     ctx.body = ctx.state.account;
   });
   app.use(authRouter.routes());
-  app.listen(3000);
+  app.listen(PORT || 5000);
+  console.log(`listening ${PORT}...`);
 }).catch((error) => console.log(error));
