@@ -1,16 +1,16 @@
-import "dotenv/config";
-import "reflect-metadata";
+import 'dotenv/config';
+import 'reflect-metadata';
 
-import { Team } from "./entity/Team";
-import { User } from "./entity/User";
+import { Team } from './entity/Team';
+import { User } from './entity/User';
 
-import * as Koa from "koa";
-import * as bodyParser from "koa-bodyparser";
-import * as koaLogger from "koa-logger";
-import * as passport from "koa-passport";
-import * as Router from "koa-router";
-import { Strategy as SlackStrategy } from "passport-slack";
-import {createConnection} from "typeorm";
+import * as Koa from 'koa';
+import * as bodyParser from 'koa-bodyparser';
+import * as koaLogger from 'koa-logger';
+import * as passport from 'koa-passport';
+import * as Router from 'koa-router';
+import { Strategy as SlackStrategy } from 'passport-slack';
+import {createConnection} from 'typeorm';
 
 createConnection().then(async (connection) => {
   passport.use(new SlackStrategy({
@@ -48,13 +48,13 @@ createConnection().then(async (connection) => {
   app.use(passport.initialize());
   app.use(bodyParser());
   const authRouter = new Router({
-    prefix: "/auth",
+    prefix: '/auth',
   });
-  authRouter.get("/text", (ctx) => {
-    ctx.body = "hello";
+  authRouter.get('/text', (ctx) => {
+    ctx.body = 'hello';
   });
-  authRouter.get("/slack", passport.authorize("slack"));
-  authRouter.get("/slack/callback", passport.authorize("slack"), (ctx) => {
+  authRouter.get('/slack', passport.authorize('slack'));
+  authRouter.get('/slack/callback', passport.authorize('slack'), (ctx) => {
     ctx.body = ctx.state.account;
   });
   app.use(authRouter.routes());
