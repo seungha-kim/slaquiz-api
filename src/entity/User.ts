@@ -24,6 +24,9 @@ export default class User implements IUserFromSlack {
   @Column()
   public name: string;
 
+  @Column({default: false})
+  public isTeacher: boolean;
+
   @ManyToOne((type) => Team, {nullable: false})
   public team: Team;
 }

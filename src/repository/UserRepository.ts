@@ -7,9 +7,13 @@ export class UserRepository {
   constructor(private manager: EntityManager) {}
 
   public async firstOrCreateTeamAndUser(teamWithoutId: ITeamFromSlack, userWithoutId: IUserFromSlack) {
+    let firstUserInTeam = false;
     const team = await this.manager.findOne(Team, {
       slackId: teamWithoutId.slackId,
     }) || new Team();
+
+    firstUserInTeam = team.id == null;
+
     this.manager.merge(Team, team, {
       name: teamWithoutId.name,
       slackId: teamWithoutId.slackId,
@@ -21,6 +25,7 @@ export class UserRepository {
     }) || new User();
     this.manager.merge(User, user, {
       email: userWithoutId.email,
+      isTeacher: firstUserInTeam,
       name: userWithoutId.name,
       slackId: userWithoutId.slackId,
       team,

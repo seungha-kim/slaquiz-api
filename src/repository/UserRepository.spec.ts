@@ -37,12 +37,21 @@ describe('UserRepository', () => {
       slackId: 'fdsa4321',
     };
 
-    test('works', (async () => {
+    test('works', async () => {
       const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
       const {team, user} = await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
       expect(team.id).toBeDefined();
       expect(user.id).toBeDefined();
-    }));
+    });
+
+    test('set isTeacher to true only if no team for user', async () => {
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+      const {team, user} = await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
+      expect(user.isTeacher).toBe(true);
+      const user2Payload = Object.assign({}, userPayload, { slackId: 'qwer5678'});
+      const {user: user2} = await userRepo.firstOrCreateTeamAndUser(teamPayload, user2Payload);
+      expect(user2.isTeacher).toBe(false);
+    });
 
     test('does not create duplicated team or user', async () => {
       const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
