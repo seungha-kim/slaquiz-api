@@ -10,7 +10,8 @@
       "watch": "npm run clean && tsc --watch",
       "typeorm": "npm run build && typeorm",
       "lint": "tslint -p .",
-      "test": "NODE_ENV=test jest"
+      "test": "NODE_ENV=test jest",
+      "setup-test-db": "(export NODE_ENV=test; npm run build && typeorm schema:drop && typeorm migrations:run)"
    },
    "keywords": [],
    "author": "",
