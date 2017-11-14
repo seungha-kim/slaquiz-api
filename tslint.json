@@ -6,7 +6,13 @@
     "jsRules": {},
     "rules": {
       "no-console": false,
-      "quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"]
+      "quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
+      "indent": [true, "spaces", 2]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+      "exclude": [
+        "src/migration/*.ts"
+      ]
+    }
 }
