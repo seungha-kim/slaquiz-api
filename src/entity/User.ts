@@ -1,8 +1,16 @@
+import 'reflect-metadata';
+
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Team } from './Team';
+import Team from './Team';
+
+export interface IUserFromSlack {
+  slackId: string;
+  email: string;
+  name: string;
+}
 
 @Entity()
-export class User {
+export default class User implements IUserFromSlack {
 
   @PrimaryGeneratedColumn()
   public id: number;

@@ -1,8 +1,6 @@
 import 'dotenv/config';
-import 'reflect-metadata';
 
-import { Team } from './entity/Team';
-import { User } from './entity/User';
+import { UserRepository } from './repository/UserRepository';
 
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
@@ -12,35 +10,36 @@ import * as Router from 'koa-router';
 import { Strategy as SlackStrategy } from 'passport-slack';
 import {createConnection} from 'typeorm';
 
+interface ISlackProfile {
+  user: {
+    email: string,
+    name: string,
+    id: string,
+  };
+  team: {
+    name: string,
+    id: string,
+  };
+}
+
 createConnection().then(async (connection) => {
   passport.use(new SlackStrategy({
     callbackURL: process.env.SLACK_CALLBACK_URL,
     clientID: process.env.SLACK_CLIENT_ID,
     clientSecret: process.env.SLACK_CLIENT_SECRET,
-  }, async (accessToken, refreshToken, profile, done) => {
+  }, async (accessToken: string, refreshToken: string, profile: ISlackProfile, done) => {
     const { manager } = connection;
-
-    const team = await manager.findOne(Team, {
-      slackId: profile.team.id,
-    }) || new Team();
-    manager.merge(Team, team, {
+    const userRepo = manager.getCustomRepository(UserRepository);
+    const {team, user} = await userRepo.firstOrCreateTeamAndUser({
       name: profile.team.name,
       slackId: profile.team.id,
-    });
-    await manager.save(team);
-
-    const user = await manager.findOne(User, {
-      slackId: profile.user.id,
-    }) || new User();
-    manager.merge(User, user, {
+    }, {
       email: profile.user.email,
       name: profile.user.name,
       slackId: profile.user.id,
-      team,
     });
-    await manager.save(user);
 
-    done(null, profile);
+    done(null, user);
   }));
 
   const app = new Koa();

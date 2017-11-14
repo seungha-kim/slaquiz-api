@@ -9,7 +9,8 @@
       "build": "npm run clean && tsc",
       "watch": "npm run clean && tsc --watch",
       "typeorm": "npm run build && typeorm",
-      "lint": "tslint -p ."
+      "lint": "tslint -p .",
+      "test": "NODE_ENV=test jest"
    },
    "keywords": [],
    "author": "",
@@ -27,14 +28,37 @@
       "typeorm": "0.1.2"
    },
    "devDependencies": {
+      "@types/jest": "^21.1.6",
       "@types/koa": "^2.0.40",
       "@types/koa-bodyparser": "^3.0.26",
       "@types/koa-passport": "^2.0.5",
       "@types/koa-router": "^7.0.24",
       "@types/node": "^8.0.29",
+      "jest": "^21.2.1",
       "rimraf": "^2.6.2",
+      "ts-jest": "^21.2.2",
       "ts-node": "3.3.0",
       "tslint": "^5.8.0",
       "typescript": "2.5.2"
+   },
+   "jest": {
+     "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+     },
+     "mapCoverage": true,
+     "testPathIgnorePatterns": [
+       "/node_modules/",
+       "/build/"
+     ],
+     "testRegex": "(/test/.test*|\\.(test|spec))\\.(ts|tsx|js)$",
+     "moduleFileExtensions": [
+       "ts",
+       "tsx",
+       "js",
+       "json"
+     ],
+     "watchPathIgnorePatterns": [
+      "(/test/.*\\.(ts|tsx|js)$"
+     ]
    }
 }
