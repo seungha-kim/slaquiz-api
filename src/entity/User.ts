@@ -1,32 +1,32 @@
-import 'reflect-metadata';
+import 'reflect-metadata'
 
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Team from './Team';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import Team from './Team'
 
 export interface IUserFromSlack {
-  slackId: string;
-  email: string;
-  name: string;
+  slackId: string
+  email: string
+  name: string
 }
 
 @Entity()
 export default class User implements IUserFromSlack {
 
   @PrimaryGeneratedColumn()
-  public id: number;
+  public id: number
 
   @Column({unique: true})
-  public slackId: string;
+  public slackId: string
 
   @Column()
-  public email: string;
+  public email: string
 
   @Column()
-  public name: string;
+  public name: string
 
   @Column({default: false})
-  public isTeacher: boolean;
+  public isTeacher: boolean
 
   @ManyToOne((type) => Team, {nullable: false})
-  public team: Team;
+  public team: Team
 }

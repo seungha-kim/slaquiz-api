@@ -7,7 +7,8 @@
     "rules": {
       "no-console": false,
       "quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
-      "indent": [true, "spaces", 2]
+      "indent": [true, "spaces", 2],
+      "semicolon": [true, "never"]
     },
     "rulesDirectory": [],
     "linterOptions": {
