@@ -1,56 +1,65 @@
 import { createConnection } from 'typeorm';
+import { Connection } from 'typeorm/connection/Connection';
 import { QueryRunner } from 'typeorm/query-runner/QueryRunner';
+
+import Team from '../entity/Team';
 import { UserRepository } from './UserRepository';
 
-async function createTestHelper() {
-  const connection = await createConnection();
-  const queryRunner = connection.createQueryRunner();
-  return {
-    closeConnection: () => {
-      return connection.close();
-    },
-    inTransaction: (testFunction: (QueryRunner) => Promise<any>) => async () => {
-      await queryRunner.startTransaction();
-      await testFunction(queryRunner);
-      await queryRunner.rollbackTransaction();
-    },
-  };
-}
-
 describe('UserRepository', () => {
-  let inTransaction;
-  let closeConnection;
+  let connection: Connection;
+  let queryRunner: QueryRunner;
 
   beforeAll(async () => {
-    const helper = await createTestHelper();
-    inTransaction = helper.inTransaction;
-    closeConnection = helper.closeConnection;
+    connection = await createConnection();
+    queryRunner = connection.createQueryRunner();
+  });
+
+  beforeEach(async () => {
+    await queryRunner.startTransaction();
+  });
+
+  afterEach(async () => {
+    await queryRunner.rollbackTransaction();
   });
 
   afterAll(async () => {
-    await closeConnection();
+    await connection.close();
   });
 
-  test('inTransaction is a function', () => {
-    expect(typeof inTransaction).toBe('function');
-    expect(inTransaction).toBeInstanceOf(Function);
-  });
+  describe('firstOrCreateTeamAndUser', () => {
+    const teamPayload = {
+      name: 'myteam',
+      slackId: 'asdf1234',
+    };
+    const userPayload = {
+      email: 'slaquiz@gmail.com',
+      name: 'seungha',
+      slackId: 'fdsa4321',
+    };
 
-  test('simple add', (async () => {
-    await inTransaction(async (qr: QueryRunner) => {
-      const teamPayload = {
-        name: 'myteam',
-        slackId: 'asdf1234',
-      };
-      const userPayload = {
-        email: 'slaquiz@gmail.com',
-        name: 'seungha',
-        slackId: 'fdsa4321',
-      };
-      const userRepo = qr.manager.getCustomRepository(UserRepository);
+    test('works', (async () => {
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
       const {team, user} = await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
-      expect(team.id).toBe(2);
-      expect(user.id).toBe(1);
+      expect(team.id).toBeDefined();
+      expect(user.id).toBeDefined();
+    }));
+
+    test('does not create duplicated team or user', async () => {
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+      await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
+      const {team, user} = await userRepo.firstOrCreateTeamAndUser(teamPayload, userPayload);
+      const teamCount = await userRepo.teamCount(team.id);
+      const userCount = await userRepo.userCount(user.id);
+      expect(teamCount).toBe(1);
+      expect(userCount).toBe(1);
     });
-  }));
+  });
+
+  describe('userCount', () => {
+    test('returns 0', async () => {
+      const userRepo = queryRunner.manager.getCustomRepository(UserRepository);
+      const userCount = await userRepo.userCount(123);
+      expect(userCount).toBe(0);
+    });
+  });
 });

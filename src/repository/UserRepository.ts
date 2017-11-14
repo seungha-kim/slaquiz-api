@@ -5,6 +5,7 @@ import User, { IUserFromSlack } from '../entity/User';
 @EntityRepository()
 export class UserRepository {
   constructor(private manager: EntityManager) {}
+
   public async firstOrCreateTeamAndUser(teamWithoutId: ITeamFromSlack, userWithoutId: IUserFromSlack) {
     const team = await this.manager.findOne(Team, {
       slackId: teamWithoutId.slackId,
@@ -27,5 +28,21 @@ export class UserRepository {
     await this.manager.save(user);
 
     return {team, user};
+  }
+
+  public async userCount(id: number): Promise<number> {
+    const { count } = await this.manager.createQueryBuilder()
+      .select('COUNT(*)', 'count')
+      .from(User, 'user')
+      .getRawOne();
+    return parseInt(count, 10);
+  }
+
+  public async teamCount(id: number): Promise<number> {
+    const { count } = await this.manager.createQueryBuilder()
+      .select('COUNT(*)', 'count')
+      .from(Team, 'team')
+      .getRawOne();
+    return parseInt(count, 10);
   }
 }
