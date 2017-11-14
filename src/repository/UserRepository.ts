@@ -50,4 +50,12 @@ export class UserRepository {
       .getRawOne()
     return parseInt(count, 10)
   }
+
+  public findUserById(id: number): Promise<User> {
+    return this.manager.findOneById(User, id, {relations: ['team']})
+  }
+
+  public findUsersByTeamId(teamId: number): Promise<User[]> {
+    return this.manager.find(User, {teamId})
+  }
 }

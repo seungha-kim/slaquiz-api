@@ -1,6 +1,7 @@
 import 'reflect-metadata'
+import User from './User'
 
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 export interface ITeamFromSlack {
   slackId: string
@@ -18,4 +19,7 @@ export default class Team implements ITeamFromSlack {
 
   @Column()
   public name: string
+
+  @OneToMany((type) => User, (user) => user.team)
+  public users: User[]
 }

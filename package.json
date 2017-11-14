@@ -4,7 +4,9 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "build": "npm run clean && tsc",
+      "clean": "rimraf build",
+      "debug": "DEBUG=slaquiz:* ts-node --inspect src/index.ts",
       "typeorm": "ts-node node_modules/.bin/typeorm",
       "lint": "tslint -p .",
       "test": "NODE_ENV=test jest",
@@ -14,9 +16,16 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "apollo-server-koa": "^1.2.0",
+      "debug": "^3.1.0",
       "dotenv": "^4.0.0",
+      "graphql": "^0.11.7",
+      "graphql-tag": "^2.5.0",
+      "graphql-tools": "^2.7.2",
+      "jsonwebtoken": "^8.1.0",
       "koa": "^2.4.1",
       "koa-bodyparser": "^4.2.0",
+      "koa-jwt": "^3.2.2",
       "koa-logger": "^3.1.0",
       "koa-passport": "^4.0.1",
       "koa-router": "^7.2.1",
@@ -40,23 +49,23 @@
       "typescript": "2.5.2"
    },
    "jest": {
-     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-     },
-     "mapCoverage": true,
-     "testPathIgnorePatterns": [
-       "/node_modules/",
-       "/build/"
-     ],
-     "testRegex": "(/test/.test*|\\.(test|spec))\\.(ts|tsx|js)$",
-     "moduleFileExtensions": [
-       "ts",
-       "tsx",
-       "js",
-       "json"
-     ],
-     "watchPathIgnorePatterns": [
-      "(/test/.*\\.(ts|tsx|js)$"
-     ]
+      "transform": {
+         ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      },
+      "mapCoverage": true,
+      "testPathIgnorePatterns": [
+         "/node_modules/",
+         "/build/"
+      ],
+      "testRegex": "(/test/.test*|\\.(test|spec))\\.(ts|tsx|js)$",
+      "moduleFileExtensions": [
+         "ts",
+         "tsx",
+         "js",
+         "json"
+      ],
+      "watchPathIgnorePatterns": [
+         "(/test/.*\\.(ts|tsx|js)$"
+      ]
    }
 }

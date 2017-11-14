@@ -27,6 +27,9 @@ export default class User implements IUserFromSlack {
   @Column({default: false})
   public isTeacher: boolean
 
-  @ManyToOne((type) => Team, {nullable: false})
+  @Column()
+  public teamId: number
+
+  @ManyToOne((type) => Team, (team) => team.users, {nullable: false})
   public team: Team
 }
