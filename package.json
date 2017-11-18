@@ -4,6 +4,7 @@
    "description": "",
    "main": "index.js",
    "scripts": {
+      "start": "ts-node src/index.ts",
       "build": "npm run clean && tsc",
       "clean": "rimraf build",
       "debug": "DEBUG=slaquiz:* ts-node --inspect src/index.ts",
@@ -16,6 +17,7 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@koa/cors": "^2.2.1",
       "apollo-server-koa": "^1.2.0",
       "debug": "^3.1.0",
       "dotenv": "^4.0.0",

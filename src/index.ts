@@ -1,3 +1,4 @@
+import * as cors from '@koa/cors'
 import { graphiqlKoa, graphqlKoa } from 'apollo-server-koa'
 import * as debug from 'debug'
 import 'dotenv/config'
@@ -82,13 +83,15 @@ createConnection().then(async (connection) => {
   }))
 
   const app = new Koa()
+    .use(cors())
+    .use(bodyParser())
     .use(koaLogger())
     .use(passport.initialize())
-    .use(bodyParser())
     .use(authRouter.routes())
     .use(authRouter.allowedMethods())
     .use(graphqlRouter.routes())
     .use(graphqlRouter.allowedMethods())
+
     .listen(PORT || 5000)
 
   console.log(`listening ${PORT}...`)
